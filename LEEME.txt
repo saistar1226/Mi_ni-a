@@ -1,0 +1,15 @@
+DANNITA XV SUPREMO — edición ampliada 💙
+
+Abre index.html con Live Server y mantén toda la carpeta junta.
+
+Incluye:
+- Portada con cuenta regresiva hasta el 09/10/2026.
+- Galería ampliada con las fotos originales y las nuevas fotos de Dannita.
+- Fotos nuevas: sus ojitos con lentes, otra foto actual y una foto de cuando era pequeña.
+- Página de XV con confeti y torta interactiva.
+- Carta escrita con tono más personal y natural.
+- Zona de juegos ampliada: corazones, arañas, memoria, estrellas, quiz y frase secreta.
+- Cofre final con 15 estrellas y sorpresa.
+- Animaciones, estrellas, telarañas, partículas y música local.
+
+Para abrirla en el teléfono, sube la carpeta completa a un hosting estático o usa Live Server desde tu PC. No borres la carpeta assets.

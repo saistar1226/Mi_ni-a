@@ -1,0 +1,20 @@
+(()=>{
+const $=s=>document.querySelector(s);const {burst,toast}=window.D;
+let hp=false,hs=0,ht=30,hTimer,spawn;
+function spawnHeart(){if(!hp)return;const a=$('#heartArena');a.querySelector('.target')?.remove();const b=document.createElement('button');b.className='target';b.textContent=Math.random()<.5?'💙':'💗';b.style.left=(5+Math.random()*82)+'%';b.style.top=(8+Math.random()*75)+'%';b.style.fontSize=(20+Math.random()*22)+'px';b.onclick=()=>{hs++;$('#score').textContent=hs;burst(b.getBoundingClientRect().x,b.getBoundingClientRect().y,4);b.remove();if(hs>=25)endHeart(true)};a.appendChild(b);spawn=setTimeout(spawnHeart,Math.max(260,800-hs*20))}
+function endHeart(win){hp=false;clearInterval(hTimer);clearTimeout(spawn);$('#heartArena').querySelector('.target')?.remove();$('#startHeart').style.display='inline-block';$('#heartMsg').textContent=win?'🏆 Lo lograste JAJAJA, sí eras rápida':'⌛ Se acabó 😭 vuelve a intentar';if(win)burst(innerWidth/2,innerHeight/2,55)}
+$('#startHeart').onclick=()=>{if(hp)return;hp=true;hs=0;ht=30;$('#score').textContent=0;$('#time').textContent=30;$('#heartMsg').textContent='';$('#startHeart').style.display='none';hTimer=setInterval(()=>{ht--;$('#time').textContent=ht;if(ht<=0)endHeart(false)},1000);spawnHeart()};
+
+const vals=['👑','💎','🎂','🕷️','💙','🌙','✨','🫶'];let deck=[...vals,...vals].sort(()=>Math.random()-.5),first=null,lock=false,moves=0,matched=0;const mem=$('#memory');
+deck.forEach(v=>{let b=document.createElement('button');b.className='tile';b.textContent='?';b.dataset.v=v;b.onclick=()=>{if(lock||b.classList.contains('flipped'))return;b.classList.add('flipped');b.textContent=v;if(!first){first=b;return}moves++;if(first.dataset.v===b.dataset.v){matched+=2;first=null;if(matched===16){$('#memoryMsg').textContent=moves<=18?'🔥 ¿QUÉ? ¿Cómo lo hiciste tan rápido?':'🎉 Memoria completada';burst(innerWidth/2,innerHeight/2,60)}}else{lock=true;setTimeout(()=>{first.textContent='?';b.textContent='?';first.classList.remove('flipped');b.classList.remove('flipped');first=null;lock=false},500)}};mem.appendChild(b)});
+
+let starsStarted=false,starsFound=0;
+function putStar(){if(!starsStarted)return;const b=document.createElement('button');b.className='star-dot';b.textContent=['✦','⭐','✨'][Math.floor(Math.random()*3)];b.style.left=(4+Math.random()*90)+'%';b.style.top=(5+Math.random()*82)+'%';b.style.animationDelay=(Math.random()*1.5)+'s';b.onclick=()=>{starsFound++;b.remove();$('#starMsg').textContent=`Encontradas: ${starsFound}/15`;burst(b.getBoundingClientRect().x,b.getBoundingClientRect().y,4);if(starsFound>=15){starsStarted=false;$('#starMsg').textContent='🌟 Las encontraste todas. Sabía que ibas a poder.';burst(innerWidth/2,innerHeight/2,70)}else putStar()};$('#starboard').appendChild(b)}
+$('#startStars').onclick=()=>{starsStarted=true;starsFound=0;$('#starMsg').textContent='Encontradas: 0/15';$('#startStars').style.display='none';for(let i=0;i<2;i++)putStar()};
+
+const qs=[['¿Qué se celebra aquí?',['Una graduación','Los XV de Dannita','Un partido','Navidad'],1],['¿Qué fotos aparecen?',['Fotos de pequeña y actuales','Una nave','Un gato','Un mapa'],0],['¿Cuántas estrellas hay que encontrar en el cofre?',['10','15','25','8'],1],['¿Qué había que hacer con la torta?',['Dormir','Apagar las velitas','Romperla','Pintarla'],1],['¿Qué frase aparece en la portada?',['Te odio Dannita','Te amo Dannita','Hola internet','XV solamente'],1]];let qi=0;
+function render(){if(qi>=qs.length){$('#question').textContent='🏆 QUIZ TERMINADO';$('#answers').innerHTML='<button id="restartQ">Volver a jugar 😈</button>';$('#restartQ').onclick=()=>{qi=0;$('#progress').style.width='0';render()};$('#quizMsg').textContent='Ya tienes permiso para ir al cofre ✨';return}let [q,ans]=[qs[qi][0],qs[qi][1]];$('#question').textContent=q;$('#answers').innerHTML='';ans.forEach((x,i)=>{let b=document.createElement('button');b.textContent=x;b.onclick=()=>{if(i===qs[qi][2]){toast('Correcto 😎');qi++;$('#progress').style.width=(qi/qs.length*100)+'%';render()}else toast('Nop 😭 prueba otra')};$('#answers').appendChild(b)})}
+$('#startQuiz').onclick=()=>{qi=0;render()};
+
+
+})();
